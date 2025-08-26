@@ -51,13 +51,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
           child: ListView.separated(
             itemCount: ProductList.length,
             itemBuilder: (context, index) {
-              //Product product = ProductList[index];
               return buildProductCard(
                 product: ProductList[index],
-                //updateProductList: () { _getProductList(); },
                 refreshProductList: () {  _getProductList(); },
 
-                //deleteProduct: () { _deleteProduct(ProductList[index].id!); },
               );
             },
             separatorBuilder: (BuildContext context, int index) {

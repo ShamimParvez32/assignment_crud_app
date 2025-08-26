@@ -9,16 +9,12 @@ class buildProductCard extends StatefulWidget {
   const buildProductCard({
     super.key,
     required this.product,
-    //required this.updateProductList,
     required this.refreshProductList,
-    //required this.deleteProduct,
   });
 
   final Product product;
-  //final VoidCallback updateProductList;
   final VoidCallback refreshProductList;
 
-  //final VoidCallback deleteProduct;
 
   @override
   State<buildProductCard> createState() => _buildProductCardState();
