@@ -10,7 +10,7 @@ import 'package:http/http.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
-
+  static const String name='/';
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
 }

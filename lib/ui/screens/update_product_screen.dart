@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:assignment_crud_app/data/product.dart';
+import 'package:assignment_crud_app/ui/screens/product_list_screen.dart';
 import 'package:assignment_crud_app/ui/utils/app_colors.dart';
 import 'package:assignment_crud_app/ui/utils/urls.dart';
 import 'package:flutter/material.dart';
@@ -212,14 +213,13 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
 
       if(response.statusCode ==200){
         ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('product Updated')));
-        Navigator.pop(context,true);
+        Navigator.pushReplacementNamed(context, ProductListScreen.name,arguments: true);
       } else {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('product not Updated')));
       }
   }
-
   @override
   void dispose() {
     // TODO: implement dispose

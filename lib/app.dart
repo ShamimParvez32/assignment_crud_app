@@ -24,7 +24,7 @@ class CrudApp extends StatelessWidget {
          widget = UpdateProductScreen(product: product);
        }else if(setting.name == ProductDetailsScreen.name){
          final id = setting.arguments as String;
-         widget = ProductDetailsScreen(id: id);
+         widget = ProductDetailsScreen(id: id,);
        }
        return MaterialPageRoute(builder: (context) => widget);
       },

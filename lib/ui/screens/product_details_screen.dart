@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key, required this.id});
+  const ProductDetailsScreen({super.key, required this.id,});
 
   final String id;
   static const String name = '/product-details';
@@ -23,10 +23,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    //_fetchProduct();
-    _fetchProduct1();
-    setState(() {
-    });
+      _fetchProduct();
   }
 
   @override
@@ -105,13 +102,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget _buildEditButton() {
     return ElevatedButton(
-      onPressed: () {
-         Navigator.pushNamed(
-            context,
-            UpdateProductScreen.name,
-            arguments: _product);
-         setState(() {
-         });
+      onPressed: () async{
+        final updatedProduct =await Navigator.pushNamed(context, UpdateProductScreen.name, arguments: _product);
+        if (updatedProduct != null && updatedProduct == true) {
+          _fetchProduct();
+        }
       },
       child: const Icon(Icons.edit),
       style: ElevatedButton.styleFrom(
@@ -123,34 +118,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  /*Future<void> _fetchProduct() async {
-    setState(() => _isLoading = true);
 
-    try {
-      final response = await get(Uri.parse(
-        'http://35.73.30.144:2008/api/v1/ReadProductById/${widget.id}',
-      ));
 
-      if (response.statusCode == 200) {
-        final decodedData = jsonDecode(response.body);
-        final responseData = decodedData['data'];
-
-        if (responseData is List && responseData.isNotEmpty) {
-          setState(() => _product = Product.fromMap(responseData[0]));
-        } else if (responseData is Map) {
-          setState(() => _product = Product.fromMap(responseData[0]));
-        }
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}'))
-      );
-    } finally {
-      setState(() => _isLoading = false);
-    }
-  }*/
-
-  Future<void> _fetchProduct1() async {
+  Future<void> _fetchProduct() async {
     _isLoading = true;
     setState(() {});
     Uri uri = Uri.parse(Urls.getProductByIdUrl(widget.id));
@@ -162,15 +132,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       final decodedData = jsonDecode(response.body);
       print(decodedData['status']);
       for (Map<String, dynamic> p in decodedData['data']) {
-         _product = Product(
-          id: p['_id'],
-          productName: p['ProductName'],
-          productCode: p['ProductCode'].toString(),
-          img: p['Img'],
-          unitPrice: p['UnitPrice'].toString(),
-          qty: p['Qty'].toString(),
-          totalPrice: p['TotalPrice'].toString(),
-        );
+         _product = Product.fromMap(p);
         setState(() {});
       }
       _isLoading = false;
