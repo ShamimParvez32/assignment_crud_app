@@ -55,7 +55,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 product: product,
                 updateProductList: () { _getProductList(); },
                 deleteProduct: () { _deleteProduct(ProductList[index].id!); },
-
               );
             },
             separatorBuilder: (BuildContext context, int index) {
