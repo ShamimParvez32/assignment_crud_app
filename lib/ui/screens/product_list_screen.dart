@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:assignment_crud_app/data/product.dart';
 import 'package:assignment_crud_app/ui/screens/add_product_screen.dart';
 import 'package:assignment_crud_app/ui/utils/app_colors.dart';
+import 'package:assignment_crud_app/ui/utils/urls.dart';
 import 'package:assignment_crud_app/ui/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -50,11 +51,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
           child: ListView.separated(
             itemCount: ProductList.length,
             itemBuilder: (context, index) {
-              Product product = ProductList[index];
+              //Product product = ProductList[index];
               return buildProductCard(
-                product: product,
-                updateProductList: () { _getProductList(); },
-                deleteProduct: () { _deleteProduct(ProductList[index].id!); },
+                product: ProductList[index],
+                //updateProductList: () { _getProductList(); },
+                refreshProductList: () {  _getProductList(); },
+
+                //deleteProduct: () { _deleteProduct(ProductList[index].id!); },
               );
             },
             separatorBuilder: (BuildContext context, int index) {
@@ -85,8 +88,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-  Future<void> _deleteProduct(String id) async {
-    Uri uri = Uri.parse('http://35.73.30.144:2008/api/v1/DeleteProduct/$id');
+
+
+  /*Future<void> _deleteProduct(String id) async {
+    Uri uri = Uri.parse(Urls.deleteProductUrl(id));
     Response response = await get(uri);
     if (response.statusCode == 200) {
       setState(() {
@@ -99,13 +104,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Delete failed')));
     }
 
-  }
+  }*/
 
   Future<void> _getProductList() async {
     ProductList.clear();
     _productListScreenInProgress = true;
     setState(() {});
-    Uri uri = Uri.parse('http://35.73.30.144:2008/api/v1/ReadProduct');
+    Uri uri = Uri.parse(Urls.getProductUrl);
     Response response = await get(uri);
     print(response.statusCode);
     print(response.body);
@@ -113,15 +118,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
       print(decodedData['status']);
-      for (Map<String, dynamic> p in decodedData['data']) {
-        Product product = Product(
-          id: p['_id'],
+      for (Map<String, dynamic> productJson in decodedData['data']) {
+        Product product = Product.fromMap(productJson
+          /*id: p['_id'],
           productName: p['ProductName'],
           productCode: p['ProductCode'].toString(),
           img: p['Img'],
           unitPrice: p['UnitPrice'].toString(),
           qty: p['Qty'].toString(),
-          totalPrice: p['TotalPrice'].toString(),
+          totalPrice: p['TotalPrice'].toString(),*/
         );
         ProductList.add(product);
         setState(() {});

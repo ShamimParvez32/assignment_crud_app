@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:assignment_crud_app/data/product.dart';
+import 'package:assignment_crud_app/ui/screens/update_product_screen.dart';
 import 'package:assignment_crud_app/ui/utils/app_colors.dart';
+import 'package:assignment_crud_app/ui/utils/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -23,6 +25,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
     //_fetchProduct();
     _fetchProduct1();
+    setState(() {
+    });
   }
 
   @override
@@ -101,7 +105,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget _buildEditButton() {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+         Navigator.pushNamed(
+            context,
+            UpdateProductScreen.name,
+            arguments: _product);
+         setState(() {
+         });
+      },
       child: const Icon(Icons.edit),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.themeColor,
@@ -142,7 +153,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Future<void> _fetchProduct1() async {
     _isLoading = true;
     setState(() {});
-    Uri uri = Uri.parse('http://35.73.30.144:2008/api/v1/ReadProductById/${widget.id}');
+    Uri uri = Uri.parse(Urls.getProductByIdUrl(widget.id));
     Response response = await get(uri);
     print(response.statusCode);
     print(response.body);

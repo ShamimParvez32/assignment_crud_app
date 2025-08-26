@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:assignment_crud_app/data/product.dart';
 import 'package:assignment_crud_app/ui/utils/app_colors.dart';
+import 'package:assignment_crud_app/ui/utils/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -198,9 +199,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   Future<void> _updateProduct() async {
     _updateProductInProgress = false;
     setState(() {});
-    Uri uri = Uri.parse(
-      'http://35.73.30.144:2008/api/v1/UpdateProduct/${widget.product.id}',
-    );
+    Uri uri = Uri.parse(Urls.updateProductUrl(widget.product.id!),);
     Map<String, dynamic> requestBody = {
       "Img": _imageTEController.text.trim(),
       "ProductCode": _codeTEController.text.trim(),

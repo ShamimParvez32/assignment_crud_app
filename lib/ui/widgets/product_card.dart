@@ -1,19 +1,33 @@
 import 'package:assignment_crud_app/data/product.dart';
 import 'package:assignment_crud_app/ui/screens/product_details_screen.dart';
 import 'package:assignment_crud_app/ui/screens/update_product_screen.dart';
+import 'package:assignment_crud_app/ui/utils/urls.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-class buildProductCard extends StatelessWidget {
+class buildProductCard extends StatefulWidget {
   const buildProductCard({
     super.key,
     required this.product,
-    required this.updateProductList,
-    required this.deleteProduct,
+    //required this.updateProductList,
+    required this.refreshProductList,
+    //required this.deleteProduct,
   });
 
   final Product product;
-  final VoidCallback updateProductList;
-  final VoidCallback deleteProduct;
+  //final VoidCallback updateProductList;
+  final VoidCallback refreshProductList;
+
+  //final VoidCallback deleteProduct;
+
+  @override
+  State<buildProductCard> createState() => _buildProductCardState();
+
+
+}
+
+class _buildProductCardState extends State<buildProductCard> {
+
 
 
   @override
@@ -24,19 +38,19 @@ class buildProductCard extends StatelessWidget {
         leading: SizedBox(
           height: 70,
           width: 70,
-          child: Image.network(product.img ?? 'Unknown', fit: BoxFit.cover),
+          child: Image.network(widget.product.img ?? 'Unknown', fit: BoxFit.cover),
         ),
         title: Text(
-          product.productName ?? 'Unknown',
+          widget.product.productName ?? 'Unknown',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Product Code : ${product.productCode ?? 'Unknown'}'),
-            Text('Product price : ${product.unitPrice ?? 'Unknown'}'),
-            Text('Total price : ${product.totalPrice ?? 'Unknown'}'),
-            Text('Qty : ${product.qty ?? 'Unknown'}'),
+            Text('Product Code : ${widget.product.productCode ?? 'Unknown'}'),
+            Text('Product price : ${widget.product.unitPrice ?? 'Unknown'}'),
+            Text('Total price : ${widget.product.totalPrice ?? 'Unknown'}'),
+            Text('Qty : ${widget.product.qty ?? 'Unknown'}'),
           ],
         ),
         trailing: Padding(
@@ -49,7 +63,7 @@ class buildProductCard extends StatelessWidget {
                   Navigator.pushNamed(
                     context,
                     ProductDetailsScreen.name,
-                    arguments: product.id,
+                    arguments: widget.product.id,
                   );
                 },
                 icon: Icon(Icons.description),
@@ -71,15 +85,15 @@ class buildProductCard extends StatelessWidget {
                 },
                 onSelected: (ProductOptions selectedOption) async {
                   if (selectedOption == ProductOptions.delete) {
-                    deleteProduct();
+                    _deleteProduct();
                   } else if (selectedOption == ProductOptions.update) {
                     final updatedProduct = await Navigator.pushNamed(
                       context,
                       UpdateProductScreen.name,
-                      arguments: product,
+                      arguments: widget.product,
                     );
                     if (updatedProduct != null && updatedProduct == true) {
-                      updateProductList();
+                      widget.refreshProductList();
                     }
                   }
                 },
@@ -90,12 +104,31 @@ class buildProductCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(
             context,
-            ProductDetailsScreen.name,arguments: product.id,
+            ProductDetailsScreen.name,arguments: widget.product.id,
           );
         },
       ),
     );
   }
+
+
+
+  Future<void> _deleteProduct() async {
+
+
+    Uri uri = Uri.parse(Urls.deleteProductUrl(widget.product.id!));
+    Response response = await get(uri);
+
+    debugPrint(response.statusCode.toString());
+    debugPrint(response.body);
+
+    if (response.statusCode == 200) {
+      widget.refreshProductList();
+    }
+  }
 }
+
+
+
 
 enum ProductOptions { update, delete }
