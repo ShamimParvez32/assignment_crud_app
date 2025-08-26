@@ -21,7 +21,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchProduct();
+    //_fetchProduct();
+    _fetchProduct1();
   }
 
   @override
@@ -111,7 +112,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Future<void> _fetchProduct() async {
+  /*Future<void> _fetchProduct() async {
     setState(() => _isLoading = true);
 
     try {
@@ -135,6 +136,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       );
     } finally {
       setState(() => _isLoading = false);
+    }
+  }*/
+
+  Future<void> _fetchProduct1() async {
+    _isLoading = true;
+    setState(() {});
+    Uri uri = Uri.parse('http://35.73.30.144:2008/api/v1/ReadProductById/${widget.id}');
+    Response response = await get(uri);
+    print(response.statusCode);
+    print(response.body);
+    print(uri);
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body);
+      print(decodedData['status']);
+      for (Map<String, dynamic> p in decodedData['data']) {
+         _product = Product(
+          id: p['_id'],
+          productName: p['ProductName'],
+          productCode: p['ProductCode'].toString(),
+          img: p['Img'],
+          unitPrice: p['UnitPrice'].toString(),
+          qty: p['Qty'].toString(),
+          totalPrice: p['TotalPrice'].toString(),
+        );
+        setState(() {});
+      }
+      _isLoading = false;
+      setState(() {});
     }
   }
 }
