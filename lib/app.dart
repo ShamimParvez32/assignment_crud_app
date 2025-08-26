@@ -28,7 +28,7 @@ class CrudApp extends StatelessWidget {
        }
 
        return MaterialPageRoute(builder: (context) => widget);
-
+//
       },
     );
   }

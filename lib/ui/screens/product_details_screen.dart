@@ -71,7 +71,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           : _buildPlaceholderImage(),
     );
   }
-
+//
   Widget _buildPlaceholderImage() {
     return Container(
       color: Colors.grey[200],
