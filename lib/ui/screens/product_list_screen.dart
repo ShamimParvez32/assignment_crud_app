@@ -87,21 +87,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
 
 
-  /*Future<void> _deleteProduct(String id) async {
-    Uri uri = Uri.parse(Urls.deleteProductUrl(id));
-    Response response = await get(uri);
-    if (response.statusCode == 200) {
-      setState(() {
-        ProductList.removeWhere((product) => product.id == id);
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Delete successful')));
-    }
 
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Delete failed')));
-    }
-
-  }*/
 
   Future<void> _getProductList() async {
     ProductList.clear();
@@ -116,15 +102,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       final decodedData = jsonDecode(response.body);
       print(decodedData['status']);
       for (Map<String, dynamic> productJson in decodedData['data']) {
-        Product product = Product.fromMap(productJson
-          /*id: p['_id'],
-          productName: p['ProductName'],
-          productCode: p['ProductCode'].toString(),
-          img: p['Img'],
-          unitPrice: p['UnitPrice'].toString(),
-          qty: p['Qty'].toString(),
-          totalPrice: p['TotalPrice'].toString(),*/
-        );
+        Product product = Product.fromMap(productJson);
         ProductList.add(product);
         setState(() {});
       }
